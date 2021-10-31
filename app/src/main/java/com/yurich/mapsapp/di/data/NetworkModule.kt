@@ -20,7 +20,7 @@ object NetworkModule {
     @Singleton
     fun retrofit(): NetworkVehicleService =
         Retrofit.Builder()
-            .baseUrl("http://data.m-tribes.com/")
+            .baseUrl("https://data.m-tribes.com/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create()

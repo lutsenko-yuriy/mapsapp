@@ -1,6 +1,7 @@
 package com.yurich.mapsapp.ui.map
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,7 +32,7 @@ class MapFragment : Fragment() {
         viewModel = ViewModelProvider(this.requireActivity())[MainViewModel::class.java]
 
         viewModel.viewState.observe(viewLifecycleOwner) {
-
+            Log.v("MapFragment", "Selected ${it.selectedVehicle} among ${it.availableVehicles.size}")
         }
     }
 }
