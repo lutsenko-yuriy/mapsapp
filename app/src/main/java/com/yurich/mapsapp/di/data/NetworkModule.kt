@@ -1,9 +1,8 @@
 package com.yurich.mapsapp.di.data
 
-import com.yurich.mapsapp.data.network.service.VehicleDataSource
 import com.yurich.mapsapp.data.network.service.NetworkVehicleService
 import com.yurich.mapsapp.data.network.service.NetworkVehicleServiceWrapper
-import dagger.Binds
+import com.yurich.mapsapp.data.network.service.VehicleDataSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,7 +14,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class NetworkModule {
+object NetworkModule {
 
     @Provides
     @Singleton
@@ -26,8 +25,9 @@ abstract class NetworkModule {
             .build()
             .create()
 
-    @Binds
+    @Provides
     @Singleton
-    abstract fun service(wrapper: NetworkVehicleServiceWrapper): VehicleDataSource
+    fun service(service: NetworkVehicleService): VehicleDataSource =
+        NetworkVehicleServiceWrapper(service)
 
 }
