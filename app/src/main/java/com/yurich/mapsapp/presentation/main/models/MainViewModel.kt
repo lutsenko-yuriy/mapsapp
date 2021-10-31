@@ -1,11 +1,11 @@
-package com.yurich.mapsapp.ui.models
+package com.yurich.mapsapp.presentation.main.models
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yurich.mapsapp.data.network.service.VehicleDataSource
-import com.yurich.mapsapp.models.Vehicle
+import com.yurich.mapsapp.domain.Vehicle
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

@@ -1,10 +1,10 @@
-package com.yurich.mapsapp.ui.main.list
+package com.yurich.mapsapp.presentation.main.list
 
 import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.yurich.mapsapp.R
-import com.yurich.mapsapp.models.Vehicle
+import com.yurich.mapsapp.domain.Vehicle
 
 class VehicleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 

@@ -2,8 +2,8 @@ package com.yurich.mapsapp.data.network.utils
 
 import com.yurich.mapsapp.data.network.models.NetworkVehicle
 import com.yurich.mapsapp.data.network.models.NetworkVehicleResponse
-import com.yurich.mapsapp.models.GeoCoordinates
-import com.yurich.mapsapp.models.Vehicle
+import com.yurich.mapsapp.domain.GeoCoordinates
+import com.yurich.mapsapp.domain.Vehicle
 import org.junit.Assert
 import org.junit.Test
 

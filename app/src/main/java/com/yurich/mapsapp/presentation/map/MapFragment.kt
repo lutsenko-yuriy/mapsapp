@@ -1,4 +1,4 @@
-package com.yurich.mapsapp.ui.map
+package com.yurich.mapsapp.presentation.map
 
 import android.os.Bundle
 import android.util.Log
@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.yurich.mapsapp.R
-import com.yurich.mapsapp.ui.models.MainViewModel
+import com.yurich.mapsapp.presentation.main.models.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

@@ -1,4 +1,4 @@
-package com.yurich.mapsapp.models
+package com.yurich.mapsapp.domain
 
 data class GeoCoordinates(
     val latitude: Double,

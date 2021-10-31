@@ -1,6 +1,6 @@
-package com.yurich.mapsapp.ui.models
+package com.yurich.mapsapp.presentation.main.models
 
-import com.yurich.mapsapp.models.Vehicle
+import com.yurich.mapsapp.domain.Vehicle
 
 data class ViewState(
     val selectedVehicle: Vehicle? = null,

@@ -1,11 +1,11 @@
-package com.yurich.mapsapp.ui.main.list
+package com.yurich.mapsapp.presentation.main.list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.yurich.mapsapp.R
-import com.yurich.mapsapp.models.Vehicle
+import com.yurich.mapsapp.domain.Vehicle
 
 class VehicleListAdapter : RecyclerView.Adapter<VehicleViewHolder>() {
 

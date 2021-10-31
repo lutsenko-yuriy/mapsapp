@@ -1,8 +1,7 @@
-package com.yurich.mapsapp.ui.main
+package com.yurich.mapsapp.presentation.main
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,8 +10,8 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yurich.mapsapp.R
-import com.yurich.mapsapp.ui.main.list.VehicleListAdapter
-import com.yurich.mapsapp.ui.models.MainViewModel
+import com.yurich.mapsapp.presentation.main.list.VehicleListAdapter
+import com.yurich.mapsapp.presentation.main.models.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

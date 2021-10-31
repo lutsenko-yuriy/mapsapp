@@ -1,7 +1,7 @@
-package com.yurich.mapsapp.ui.main.list
+package com.yurich.mapsapp.presentation.main.list
 
 import androidx.recyclerview.widget.DiffUtil
-import com.yurich.mapsapp.models.Vehicle
+import com.yurich.mapsapp.domain.Vehicle
 
 class VehicleDifferenceCallback(
     private val oldList: List<Vehicle>,

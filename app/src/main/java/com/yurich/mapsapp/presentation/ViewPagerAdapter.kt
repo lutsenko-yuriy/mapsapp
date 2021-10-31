@@ -1,10 +1,10 @@
-package com.yurich.mapsapp.ui
+package com.yurich.mapsapp.presentation
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.yurich.mapsapp.ui.main.MainFragment
-import com.yurich.mapsapp.ui.map.MapFragment
+import com.yurich.mapsapp.presentation.main.MainFragment
+import com.yurich.mapsapp.presentation.map.MapFragment
 
 class ViewPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
 

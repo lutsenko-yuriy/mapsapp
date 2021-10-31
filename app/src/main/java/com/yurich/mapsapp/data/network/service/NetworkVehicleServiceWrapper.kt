@@ -1,7 +1,7 @@
 package com.yurich.mapsapp.data.network.service
 
 import com.yurich.mapsapp.data.network.utils.toVehicles
-import com.yurich.mapsapp.models.Vehicle
+import com.yurich.mapsapp.domain.Vehicle
 import javax.inject.Inject
 import javax.inject.Singleton
 
