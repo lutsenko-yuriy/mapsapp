@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
@@ -19,7 +19,8 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.yurich.mapsapp.R
 import com.yurich.mapsapp.domain.Vehicle
-import com.yurich.mapsapp.presentation.main.models.MainViewModel
+import com.yurich.mapsapp.presentation.models.VehicleListViewModel
+import com.yurich.mapsapp.presentation.models.VehicleSelectionViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -30,7 +31,8 @@ class MapFragment : Fragment() {
         fun newInstance() = MapFragment()
     }
 
-    private lateinit var viewModel: MainViewModel
+    private val vehicleListViewModel: VehicleListViewModel by activityViewModels()
+    private val vehicleSelectionViewModel: VehicleSelectionViewModel by activityViewModels()
 
     private lateinit var mapView: MapView
     private lateinit var map: GoogleMap
@@ -65,8 +67,6 @@ class MapFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(this.requireActivity())[MainViewModel::class.java]
-
         initializeMap(view, savedInstanceState)
     }
 
@@ -82,24 +82,24 @@ class MapFragment : Fragment() {
                     .firstNotNullOfOrNull { it.key }
                     ?.let {
                         if (selectedVehicle != null) {
-                            viewModel.unselectVehicle()
+                            vehicleSelectionViewModel.unselectVehicle()
                         } else {
-                            viewModel.selectVehicle(it)
+                            vehicleSelectionViewModel.selectVehicle(it)
                         }
                     }
                 true
             }
 
             map.setOnMapClickListener {
-                viewModel.unselectVehicle()
+                vehicleSelectionViewModel.unselectVehicle()
             }
 
             showUserLocationOrRequestPermission()
-            viewModel.availableVehiclesViewState.observe(viewLifecycleOwner) {
+            vehicleListViewModel.availableVehiclesViewState.observe(viewLifecycleOwner) {
                 updateAvailableVehiclesOnMap(it)
             }
 
-            viewModel.selectedVehicleViewState.observe(viewLifecycleOwner) {
+            vehicleSelectionViewModel.selectedVehicleViewState.observe(viewLifecycleOwner) {
                 updateSelectedVehicleOnMap(it)
             }
         }

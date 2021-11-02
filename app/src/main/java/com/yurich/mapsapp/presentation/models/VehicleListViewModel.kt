@@ -1,4 +1,4 @@
-package com.yurich.mapsapp.presentation.main.models
+package com.yurich.mapsapp.presentation.models
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,13 +11,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(private val source: VehicleDataSource) : ViewModel() {
+class VehicleListViewModel @Inject constructor(private val source: VehicleDataSource) : ViewModel() {
 
     private val privateAvailableVehiclesViewState = MutableLiveData(listOf<Vehicle>())
     val availableVehiclesViewState: LiveData<List<Vehicle>> = privateAvailableVehiclesViewState
-
-    private val privateSelectedVehicleViewState = MutableLiveData<Vehicle?>()
-    val selectedVehicleViewState: LiveData<Vehicle?> = privateSelectedVehicleViewState
 
     init {
         viewModelScope.launch {
@@ -29,15 +26,4 @@ class MainViewModel @Inject constructor(private val source: VehicleDataSource) :
         }
     }
 
-    fun selectVehicle(vehicle: Vehicle) {
-        privateAvailableVehiclesViewState.value?.run {
-            privateSelectedVehicleViewState.value = vehicle
-        }
-    }
-
-    fun unselectVehicle() {
-        privateSelectedVehicleViewState.value?.run {
-            privateSelectedVehicleViewState.value = null
-        }
-    }
 }

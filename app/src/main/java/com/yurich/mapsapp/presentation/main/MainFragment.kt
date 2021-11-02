@@ -1,19 +1,20 @@
 package com.yurich.mapsapp.presentation.main
 
 import android.content.Context
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yurich.mapsapp.R
 import com.yurich.mapsapp.domain.Vehicle
 import com.yurich.mapsapp.presentation.main.list.VehicleListAdapter
-import com.yurich.mapsapp.presentation.main.models.MainViewModel
+import com.yurich.mapsapp.presentation.models.VehicleListViewModel
+import com.yurich.mapsapp.presentation.models.VehicleSelectionViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -23,7 +24,8 @@ class MainFragment : Fragment(), VehicleListAdapter.OnVehicleItemClickListener {
         fun newInstance() = MainFragment()
     }
 
-    private lateinit var viewModel: MainViewModel
+    private val vehicleListViewModel: VehicleListViewModel by activityViewModels()
+    private val vehicleSelectionViewModel: VehicleSelectionViewModel by activityViewModels()
 
     private lateinit var vehiclesList: RecyclerView
     private lateinit var vehiclesAdapter: VehicleListAdapter
@@ -46,8 +48,11 @@ class MainFragment : Fragment(), VehicleListAdapter.OnVehicleItemClickListener {
 
     private fun initializeList(view: View) {
         vehiclesList = view.findViewById(R.id.vehicle_list)
-        vehiclesList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        vehiclesList.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
+        vehiclesList.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        vehiclesList.addItemDecoration(
+            DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
+        )
 
         vehiclesAdapter = VehicleListAdapter(this)
 
@@ -55,15 +60,13 @@ class MainFragment : Fragment(), VehicleListAdapter.OnVehicleItemClickListener {
     }
 
     private fun initializeViewModel() {
-        viewModel = ViewModelProvider(this.requireActivity())[MainViewModel::class.java]
-
-        viewModel.availableVehiclesViewState.observe(viewLifecycleOwner) {
+        vehicleListViewModel.availableVehiclesViewState.observe(viewLifecycleOwner) {
             vehiclesAdapter.updateList(it)
         }
     }
 
     override fun onVehicleItemClicked(vehicle: Vehicle) {
-        viewModel.selectVehicle(vehicle)
+        vehicleSelectionViewModel.selectVehicle(vehicle)
         onVehicleSelectedListener?.onVehicleSelected()
     }
 
