@@ -72,6 +72,13 @@ class MapFragment : Fragment() {
         mapView.getMapAsync { map ->
             this@MapFragment.map = map
 
+            map.setOnMarkerClickListener {
+                false
+            }
+            map.setOnMapClickListener {
+                viewModel.unselectVehicle()
+            }
+
             showUserLocationOrRequestPermission()
             viewModel.viewState.observe(viewLifecycleOwner) {
                 updateMapState(it)
@@ -90,20 +97,20 @@ class MapFragment : Fragment() {
 
     private fun updateMapState(state: ViewState) {
         map.clear()
-        if (state.selectedVehicle != null) {
-            drawMarkerForVehicle(map, state.selectedVehicle)
-        } else {
-            for (vehicle in state.availableVehicles) {
-                drawMarkerForVehicle(map, vehicle)
-            }
+        for (vehicle in state.availableVehicles) {
+            drawMarkerForVehicle(
+                map, vehicle,
+                state.selectedVehicle == null || (state.selectedVehicle == vehicle)
+            )
         }
     }
 
-    private fun drawMarkerForVehicle(map: GoogleMap, vehicle: Vehicle) {
+    private fun drawMarkerForVehicle(map: GoogleMap, vehicle: Vehicle, isVisible: Boolean) {
         map.addMarker(
             MarkerOptions()
                 .position(LatLng(vehicle.coordinates.latitude, vehicle.coordinates.longitude))
                 .title(vehicle.name)
+                .visible(isVisible)
         )
     }
 

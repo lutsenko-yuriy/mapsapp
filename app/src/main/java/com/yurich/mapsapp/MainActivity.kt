@@ -23,6 +23,8 @@ class MainActivity : AppCompatActivity() {
         tabs = findViewById(R.id.tab_layout)
         pager = findViewById(R.id.view_pager)
 
+        pager.isUserInputEnabled = false
+
         viewPagerAdapter = ViewPagerAdapter(this)
 
         pager.adapter = viewPagerAdapter
