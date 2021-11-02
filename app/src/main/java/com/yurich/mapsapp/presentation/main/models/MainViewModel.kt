@@ -11,30 +11,33 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(private val source: VehicleDataSource): ViewModel() {
+class MainViewModel @Inject constructor(private val source: VehicleDataSource) : ViewModel() {
 
-    private val _privateViewState = MutableLiveData(ViewState())
-    val viewState: LiveData<ViewState> = _privateViewState
+    private val privateAvailableVehiclesViewState = MutableLiveData(listOf<Vehicle>())
+    val availableVehiclesViewState: LiveData<List<Vehicle>> = privateAvailableVehiclesViewState
+
+    private val privateSelectedVehicleViewState = MutableLiveData<Vehicle?>()
+    val selectedVehicleViewState: LiveData<Vehicle?> = privateSelectedVehicleViewState
 
     init {
         viewModelScope.launch {
-            _privateViewState.value?.run {
-                _privateViewState.postValue(
-                    this.copy(availableVehicles = source.getVehicles())
+            privateAvailableVehiclesViewState.value?.run {
+                privateAvailableVehiclesViewState.postValue(
+                    source.getVehicles()
                 )
             }
         }
     }
 
     fun selectVehicle(vehicle: Vehicle) {
-        _privateViewState.value?.run {
-            _privateViewState.value = this.copy(selectedVehicle = vehicle)
+        privateAvailableVehiclesViewState.value?.run {
+            privateSelectedVehicleViewState.value = vehicle
         }
     }
 
     fun unselectVehicle() {
-        _privateViewState.value?.run {
-            _privateViewState.value = this.copy(selectedVehicle = null)
+        privateSelectedVehicleViewState.value?.run {
+            privateSelectedVehicleViewState.value = null
         }
     }
 }

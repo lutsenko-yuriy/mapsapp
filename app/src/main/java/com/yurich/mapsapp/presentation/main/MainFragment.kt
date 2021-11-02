@@ -1,5 +1,6 @@
 package com.yurich.mapsapp.presentation.main
 
+import android.content.Context
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -10,12 +11,13 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yurich.mapsapp.R
+import com.yurich.mapsapp.domain.Vehicle
 import com.yurich.mapsapp.presentation.main.list.VehicleListAdapter
 import com.yurich.mapsapp.presentation.main.models.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainFragment : Fragment() {
+class MainFragment : Fragment(), VehicleListAdapter.OnVehicleItemClickListener {
 
     companion object {
         fun newInstance() = MainFragment()
@@ -25,6 +27,8 @@ class MainFragment : Fragment() {
 
     private lateinit var vehiclesList: RecyclerView
     private lateinit var vehiclesAdapter: VehicleListAdapter
+
+    private var onVehicleSelectedListener: OnVehicleSelectedListener? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,7 +49,7 @@ class MainFragment : Fragment() {
         vehiclesList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         vehiclesList.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
 
-        vehiclesAdapter = VehicleListAdapter()
+        vehiclesAdapter = VehicleListAdapter(this)
 
         vehiclesList.adapter = vehiclesAdapter
     }
@@ -53,10 +57,30 @@ class MainFragment : Fragment() {
     private fun initializeViewModel() {
         viewModel = ViewModelProvider(this.requireActivity())[MainViewModel::class.java]
 
-        viewModel.viewState.observe(viewLifecycleOwner) {
-            vehiclesAdapter.updateList(it.availableVehicles)
+        viewModel.availableVehiclesViewState.observe(viewLifecycleOwner) {
+            vehiclesAdapter.updateList(it)
         }
     }
 
+    override fun onVehicleItemClicked(vehicle: Vehicle) {
+        viewModel.selectVehicle(vehicle)
+        onVehicleSelectedListener?.onVehicleSelected()
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is OnVehicleSelectedListener) {
+            onVehicleSelectedListener = context
+        }
+    }
+
+    override fun onDetach() {
+        onVehicleSelectedListener = null
+        super.onDetach()
+    }
+
+    interface OnVehicleSelectedListener {
+        fun onVehicleSelected()
+    }
 
 }

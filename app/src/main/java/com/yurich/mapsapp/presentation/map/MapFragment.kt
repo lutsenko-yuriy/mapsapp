@@ -10,14 +10,16 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.yurich.mapsapp.R
 import com.yurich.mapsapp.domain.Vehicle
 import com.yurich.mapsapp.presentation.main.models.MainViewModel
-import com.yurich.mapsapp.presentation.main.models.ViewState
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -32,6 +34,9 @@ class MapFragment : Fragment() {
 
     private lateinit var mapView: MapView
     private lateinit var map: GoogleMap
+
+    private val markers = mutableMapOf<Vehicle, Marker?>()
+    private var selectedVehicle: Vehicle? = null
 
     @SuppressLint("MissingPermission")
     private val locationPermissionRequest: ActivityResultLauncher<Array<String>> =
@@ -72,16 +77,30 @@ class MapFragment : Fragment() {
         mapView.getMapAsync { map ->
             this@MapFragment.map = map
 
-            map.setOnMarkerClickListener {
-                false
+            map.setOnMarkerClickListener { marker ->
+                markers.filterValues { it == marker }
+                    .firstNotNullOfOrNull { it.key }
+                    ?.let {
+                        if (selectedVehicle != null) {
+                            viewModel.unselectVehicle()
+                        } else {
+                            viewModel.selectVehicle(it)
+                        }
+                    }
+                true
             }
+
             map.setOnMapClickListener {
                 viewModel.unselectVehicle()
             }
 
             showUserLocationOrRequestPermission()
-            viewModel.viewState.observe(viewLifecycleOwner) {
-                updateMapState(it)
+            viewModel.availableVehiclesViewState.observe(viewLifecycleOwner) {
+                updateAvailableVehiclesOnMap(it)
+            }
+
+            viewModel.selectedVehicleViewState.observe(viewLifecycleOwner) {
+                updateSelectedVehicleOnMap(it)
             }
         }
     }
@@ -95,23 +114,49 @@ class MapFragment : Fragment() {
         )
     }
 
-    private fun updateMapState(state: ViewState) {
+    private fun updateAvailableVehiclesOnMap(availableVehicles: List<Vehicle>) {
         map.clear()
-        for (vehicle in state.availableVehicles) {
-            drawMarkerForVehicle(
-                map, vehicle,
-                state.selectedVehicle == null || (state.selectedVehicle == vehicle)
-            )
+        markers.clear()
+
+        val bounds = LatLngBounds.builder()
+
+        for (vehicle in availableVehicles) {
+            val latLng = LatLng(vehicle.coordinates.latitude, vehicle.coordinates.longitude)
+
+            if (markers[vehicle] == null) {
+                markers[vehicle] =
+                    map.addMarker(
+                        MarkerOptions()
+                            .position(latLng)
+                            .title(vehicle.name)
+                    )
+            }
+
+            bounds.include(latLng)
         }
+
+        map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds.build(), 100))
     }
 
-    private fun drawMarkerForVehicle(map: GoogleMap, vehicle: Vehicle, isVisible: Boolean) {
-        map.addMarker(
-            MarkerOptions()
-                .position(LatLng(vehicle.coordinates.latitude, vehicle.coordinates.longitude))
-                .title(vehicle.name)
-                .visible(isVisible)
-        )
+    private fun updateSelectedVehicleOnMap(selectedVehicle: Vehicle?) {
+        this.selectedVehicle = selectedVehicle
+        for (entry in markers) {
+            val selected = entry.key == selectedVehicle
+            if (selected) {
+                entry.value?.showInfoWindow()
+            }
+
+            val visible = selected || selectedVehicle == null
+            entry.value?.isVisible = visible
+        }
+
+        selectedVehicle?.run {
+            map.moveCamera(
+                CameraUpdateFactory.newLatLng(
+                    LatLng(coordinates.latitude, coordinates.longitude)
+                )
+            )
+        }
     }
 
     override fun onResume() {

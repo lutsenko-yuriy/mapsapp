@@ -8,7 +8,8 @@ import com.yurich.mapsapp.domain.Vehicle
 
 class VehicleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    private lateinit var vehicle: Vehicle
+    lateinit var vehicle: Vehicle
+        private set
 
     private val name: TextView = itemView.findViewById(R.id.vehicle_name)
     private val address: TextView = itemView.findViewById(R.id.vehicle_address)

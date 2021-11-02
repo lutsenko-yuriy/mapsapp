@@ -6,10 +6,11 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.yurich.mapsapp.presentation.ViewPagerAdapter
+import com.yurich.mapsapp.presentation.main.MainFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), MainFragment.OnVehicleSelectedListener {
 
     private lateinit var tabs: TabLayout
     private lateinit var pager: ViewPager2
@@ -38,5 +39,9 @@ class MainActivity : AppCompatActivity() {
                 }
             )
         }.attach()
+    }
+
+    override fun onVehicleSelected() {
+        pager.setCurrentItem(1, true)
     }
 }
