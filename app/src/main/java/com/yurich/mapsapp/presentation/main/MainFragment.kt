@@ -33,17 +33,14 @@ class MainFragment : Fragment() {
         return inflater.inflate(R.layout.main_fragment, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        initializeList()
-
+        initializeList(view)
         initializeViewModel()
     }
 
-    private fun initializeList() {
-        val view = this.view ?: return
-
+    private fun initializeList(view: View) {
         vehiclesList = view.findViewById(R.id.vehicle_list)
         vehiclesList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         vehiclesList.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
