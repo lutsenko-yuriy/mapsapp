@@ -159,9 +159,24 @@ class MapFragment : Fragment() {
         }
     }
 
+    override fun onStart() {
+        mapView.onStart()
+        super.onStart()
+    }
+
     override fun onResume() {
         mapView.onResume()
         super.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mapView.onPause()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        mapView.onStop()
     }
 
     override fun onDestroyView() {
