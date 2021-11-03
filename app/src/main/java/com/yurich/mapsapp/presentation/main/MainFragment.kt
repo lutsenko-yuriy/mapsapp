@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.yurich.mapsapp.R
 import com.yurich.mapsapp.domain.Vehicle
 import com.yurich.mapsapp.presentation.main.list.VehicleListAdapter
-import com.yurich.mapsapp.presentation.models.VehicleListViewModel
-import com.yurich.mapsapp.presentation.models.VehicleSelectionViewModel
+import com.yurich.mapsapp.presentation.viewModels.VehicleListViewModel
+import com.yurich.mapsapp.presentation.viewModels.VehicleSelectionViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

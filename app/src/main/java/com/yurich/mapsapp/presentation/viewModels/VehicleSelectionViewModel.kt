@@ -1,4 +1,4 @@
-package com.yurich.mapsapp.presentation.models
+package com.yurich.mapsapp.presentation.viewModels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
